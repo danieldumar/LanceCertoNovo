@@ -1,8 +1,33 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Bem-vindo ao Lance Certo";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<main role="main" class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Bem-vindo ao <span class="text-primary">Lance Certo</span></h1>
+        <p class="lead text-muted">
+            Sua plataforma de leilões de imóveis online — segura, acessível e fácil de usar.
+        </p>
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg" aria-label="Ir para login">Entrar</a>
+            <a asp-controller="Account" asp-action="Cadastro" class="btn btn-outline-secondary btn-lg" aria-label="Criar conta">Criar Conta</a>
+        </div>
+    </div>
+
+    <hr class="my-5" />
+
+    <section class="row text-center">
+        <div class="col-md-4 mb-4">
+            <h5 class="fw-semibold">Leilões em Tempo Real</h5>
+            <p class="text-muted">Participe de leilões com contagem regressiva e lances ao vivo em tempo real.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h5 class="fw-semibold">Cadastro Simplificado</h5>
+            <p class="text-muted">Crie sua conta de forma rápida e tenha acesso total à plataforma.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h5 class="fw-semibold">Transparência e Segurança</h5>
+            <p class="text-muted">Imóveis com informações completas e rastreabilidade dos lances.</p>
+        </div>
+    </section>
+</main>

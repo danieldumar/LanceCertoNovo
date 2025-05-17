@@ -1,8 +1,9 @@
-using System.Diagnostics;
-using LanceCertoNovo.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
-namespace LanceCertoNovo.Controllers
+namespace LanceCerto.WebApp.Controllers
 {
     public class HomeController : Controller
     {
@@ -13,20 +14,42 @@ namespace LanceCertoNovo.Controllers
             _logger = logger;
         }
 
+        // GET: /Home/Index
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
+            // Se o usuário já estiver autenticado, redireciona para o sistema
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                return RedirectToAction("Index", "Imovel");
+            }
+
+            // Página inicial pública com "Entrar" e "Criar Conta"
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        // GET: /Home/Error
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            if (exceptionFeature != null)
+            {
+                _logger.LogError(exceptionFeature.Error,
+                    "Erro não tratado na rota: {Path}", exceptionFeature.Path);
+            }
+
+            return View("Error");
+        }
+
+        // GET: /Home/Privacy
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Privacy()
+        {
+            return View(); // View opcional com a política de privacidade
         }
     }
 }

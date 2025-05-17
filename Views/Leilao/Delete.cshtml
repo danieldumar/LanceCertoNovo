@@ -1,0 +1,43 @@
+﻿@model LanceCerto.WebApp.Models.Leilao
+
+@{
+    ViewData["Title"] = "Excluir Leilão";
+}
+
+<h2 class="mb-4">Confirmação de Exclusão</h2>
+
+<div class="alert alert-warning">
+    Tem certeza de que deseja excluir este leilão? Esta ação não poderá ser desfeita.
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">Imóvel</dt>
+            <dd class="col-sm-9">@Model.Imovel?.Titulo (@Model.Imovel?.Cidade - @Model.Imovel?.Estado)</dd>
+
+            <dt class="col-sm-3">Vencedor (ID)</dt>
+            <dd class="col-sm-9">@Model.Vencedor?.Id ?? "Nenhum"</dd>
+
+            <dt class="col-sm-3">Início</dt>
+            <dd class="col-sm-9">@Model.InicioEm.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Fim</dt>
+            <dd class="col-sm-9">@Model.FimEm.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+
+            <dt class="col-sm-3">Maior Lance Atual</dt>
+            <dd class="col-sm-9">R$ @Model.MaiorLanceAtual.ToString("N2")</dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="LeilaoId" />
+    <div class="d-flex flex-wrap gap-2">
+        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

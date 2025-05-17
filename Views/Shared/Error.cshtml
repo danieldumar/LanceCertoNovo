@@ -1,25 +1,16 @@
-﻿@model ErrorViewModel
-@{
-    ViewData["Title"] = "Error";
+﻿@{
+    ViewData["Title"] = "Erro";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<div class="container text-center mt-5">
+    <div class="alert alert-danger shadow p-4 rounded" role="alert" aria-label="Erro interno no sistema">
+        <h1 class="display-4 mb-3"><i class="bi bi-exclamation-triangle-fill text-danger"></i> Ops! Algo deu errado.</h1>
+        <p class="lead">Ocorreu um erro inesperado ao processar sua solicitação.</p>
+        <p class="text-muted">Tente novamente mais tarde ou entre em contato com o suporte técnico.</p>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
-
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+        <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
+            <a class="btn btn-primary" asp-controller="Home" asp-action="Index" aria-label="Voltar à Página Inicial">🏠 Página Inicial</a>
+            <a class="btn btn-outline-secondary" asp-controller="Account" asp-action="Login" aria-label="Ir para a página de login">🔐 Fazer Login</a>
+        </div>
+    </div>
+</div>

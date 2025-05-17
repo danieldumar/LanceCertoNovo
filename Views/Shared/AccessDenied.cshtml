@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Acesso Negado";
+}
+
+<div class="container text-center mt-5">
+    <div class="alert alert-warning shadow p-4 rounded" role="alert">
+        <h1 class="display-4"><i class="bi bi-shield-lock-fill text-warning"></i> Acesso Negado</h1>
+        <p class="lead">Você não tem permissão para acessar esta página.</p>
+        <p class="text-muted">Se você acredita que isso é um erro, entre em contato com o administrador do sistema.</p>
+
+        <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
+            <a class="btn btn-primary" asp-controller="Home" asp-action="Index" aria-label="Voltar à Página Inicial">🏠 Página Inicial</a>
+            <a class="btn btn-outline-secondary" asp-controller="Account" asp-action="Login" aria-label="Ir para a página de login">🔐 Fazer Login</a>
+        </div>
+    </div>
+</div>

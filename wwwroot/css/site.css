@@ -8,10 +8,6 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
 html {
   position: relative;
   min-height: 100%;
@@ -19,4 +15,21 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.btn-primary-custom {
+    background-color: #071952;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-primary-custom:hover {
+        background-color: #088395;
+        color: white;
+    }
+
+/* Espaço entre botões, se necessário */
+.btn + .btn {
+    margin-left: 0.25rem;
 }

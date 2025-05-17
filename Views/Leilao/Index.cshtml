@@ -1,0 +1,54 @@
+﻿@model IEnumerable<LanceCerto.WebApp.Models.Leilao>
+
+@{
+    ViewData["Title"] = "Leilões Disponíveis";
+}
+
+<h2 class="mb-4">Leilões Disponíveis</h2>
+
+<div class="mb-3 text-end">
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Novo Leilão
+    </a>
+</div>
+
+<table class="table table-bordered table-hover table-striped align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Imóvel</th>
+            <th>Vencedor</th>
+            <th>Início</th>
+            <th>Fim</th>
+            <th>Status</th>
+            <th>Maior Lance</th>
+            <th style="width:180px">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="7" class="text-center text-muted">Nenhum leilão cadastrado.</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Imovel?.Titulo</td>
+                    <td>@(item.Vencedor?.Nome ?? "Sem vencedor")</td>
+                    <td>@item.InicioEm.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.FimEm.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@item.Status</td>
+                    <td>R$ @item.MaiorLanceAtual.ToString("N2")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.LeilaoId" class="btn btn-sm btn-primary me-1" aria-label="Ver detalhes do leilão">Detalhes</a>
+                        <a asp-action="Edit" asp-route-id="@item.LeilaoId" class="btn btn-sm btn-outline-secondary me-1" aria-label="Editar leilão">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.LeilaoId" class="btn btn-sm btn-outline-danger" aria-label="Excluir leilão">Excluir</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
