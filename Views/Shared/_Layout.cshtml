@@ -1,0 +1,106 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using LanceCerto.WebApp.Models
+@inject SignInManager<Usuario> SignInManager
+@inject UserManager<Usuario> UserManager
+
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var isPublicHome = controller == "Home" && (action == "Index" || string.IsNullOrEmpty(action));
+    var isAuthPage = controller == "Account" && (action == "Login" || action == "Cadastro");
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Lance Certo</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LanceCerto.WebApp.styles.css" asp-append-version="true" />
+
+    <style>
+        .navbar-nav .nav-link:hover {
+            color: #37B7C3 !important;
+        }
+    </style>
+</head>
+<body style="background-color: #EBF4F6;" class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: #071952;">
+            <div class="container-fluid">
+                <a class="navbar-brand text-white fw-bold" asp-controller="Home" asp-action="Index">Lance Certo</a>
+
+                @* Exibe a navbar somente se for usuário autenticado ou fora da tela pública inicial *@
+                @if (!isPublicHome || SignInManager.IsSignedIn(User))
+                {
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                            aria-controls="navbarMain" aria-expanded="false" aria-label="Menu de navegação">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarMain">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Imovel" asp-action="Index">Imóveis</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Leilao" asp-action="Index">Leilões</a>
+                                </li>
+                            }
+                        </ul>
+
+                        <ul class="navbar-nav ms-auto">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item d-flex align-items-center me-2">
+                                    @{
+                                        var currentUser = await UserManager.GetUserAsync(User);
+                                        var displayName = currentUser?.Nome ?? User.Identity?.Name;
+                                    }
+                                    <span class="nav-link text-light">Olá, @displayName!</span>
+                                </li>
+                                <li class="nav-item">
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-link nav-link text-light border-0" aria-label="Sair da conta">Sair</button>
+                                    </form>
+                                </li>
+                            }
+                            else if (!isAuthPage) @* 🔒 Oculta "Entrar / Criar Conta" nas telas Account/Login e Account/Cadastro *@
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-controller="Account" asp-action="Cadastro">Criar Conta</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-controller="Account" asp-action="Login">Entrar</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="container py-4 flex-grow-1">
+        @RenderBody()
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            &copy; @DateTime.Now.Year - Lance Certo ·
+            <a asp-controller="Home" asp-action="Privacy" class="text-decoration-none" style="color: #37B7C3;">Privacidade</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="~/js/site.js" asp-append-version="true" defer></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

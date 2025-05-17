@@ -1,0 +1,20 @@
+﻿# Ignorar pasta .vs
+.vs/
+
+# Ignorar arquivos binários
+bin/
+obj/
+
+# Ignorar arquivos temporários
+*.user
+*.suo
+*.tmp
+*.log
+*.vspscc
+*.vssscc
+
+# Outros arquivos específicos do Visual Studio
+*.dbmdl
+*.pdb
+*.cache
+*.ncb

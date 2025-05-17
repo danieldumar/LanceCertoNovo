@@ -1,0 +1,58 @@
+@model LanceCerto.WebApp.Models.Imovel
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@{
+    ViewData["Title"] = "Confirmar Exclusão";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-4 text-danger">@ViewData["Title"] de Imóvel</h2>
+
+<div class="alert alert-warning border border-danger rounded shadow-sm" role="alert" aria-live="assertive" aria-atomic="true">
+    <strong>Atenção:</strong> Esta ação é <span class="fw-bold">irreversível</span>. Deseja realmente excluir o imóvel abaixo?
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h5 class="card-title fw-bold text-primary">@Model.Titulo</h5>
+        <dl class="row gy-2">
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Tipo):</dt>
+            <dd class="col-sm-9">@Model.Tipo</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Endereco):</dt>
+            <dd class="col-sm-9">@Model.Endereco</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Cidade):</dt>
+            <dd class="col-sm-9">@Model.Cidade</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Estado):</dt>
+            <dd class="col-sm-9">@Model.Estado</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.PrecoMinimo):</dt>
+            <dd class="col-sm-9">R$ @Model.PrecoMinimo.ToString("N2")</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Status):</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+        </dl>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ImagemUrl))
+        {
+            <div class="text-center mt-3">
+                <img src="@Model.ImagemUrl"
+                     alt="Imagem do imóvel: @Model.Titulo"
+                     class="img-fluid rounded border"
+                     style="max-height:180px;" />
+            </div>
+        }
+    </div>
+</div>
+
+<form asp-action="Delete" method="post" class="d-flex flex-wrap gap-2" aria-label="Confirmar exclusão de imóvel">
+    <input type="hidden" asp-for="ImovelId" />
+    <button type="submit" class="btn btn-danger" aria-label="Confirmar exclusão">Sim, excluir</button>
+    <a asp-action="Index" class="btn btn-outline-secondary" aria-label="Cancelar exclusão">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

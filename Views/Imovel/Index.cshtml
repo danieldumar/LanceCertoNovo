@@ -1,0 +1,111 @@
+@model IEnumerable<LanceCerto.WebApp.Models.Imovel>
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@{
+    ViewData["Title"] = "Pesquisa de Imóveis";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<form asp-action="Index" method="get" class="mb-4" role="search" aria-label="Formulário de pesquisa de imóveis">
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label for="cidade" class="visually-hidden">Cidade</label>
+            <input type="text"
+                   id="cidade"
+                   name="cidade"
+                   class="form-control"
+                   placeholder="Cidade"
+                   value="@Context.Request.Query["cidade"]" />
+        </div>
+
+        <div class="col-md-3">
+            <label for="estado" class="visually-hidden">Estado (UF)</label>
+            <select id="estado"
+                    name="estado"
+                    class="form-select"
+                    asp-items="@(ViewData["Estados"] as List<SelectListItem>)">
+                <option value="">Estado (UF)</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="tipo" class="visually-hidden">Tipo de Imóvel</label>
+            <select id="tipo"
+                    name="tipo"
+                    class="form-select"
+                    asp-items="@(ViewData["Tipos"] as List<SelectListItem>)">
+                <option value="">Tipo de Imóvel</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="precoMaximo" class="visually-hidden">Preço Máximo</label>
+            <input type="number"
+                   id="precoMaximo"
+                   name="precoMaximo"
+                   class="form-control"
+                   step="0.01"
+                   placeholder="Preço Máximo"
+                   value="@Context.Request.Query["precoMaximo"]" />
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col text-end">
+            <button type="submit"
+                    class="btn btn-primary me-2"
+                    aria-label="Buscar imóveis com os filtros informados">
+                Pesquisar
+            </button>
+            <a asp-action="Create"
+               class="btn btn-success"
+               aria-label="Cadastrar um novo imóvel">
+                Cadastrar Novo Imóvel
+            </a>
+        </div>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning text-center" role="alert">
+        Nenhum imóvel encontrado com os critérios informados.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>Preço Mínimo</th>
+                    <th>Status</th>
+                    <th style="width: 180px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Titulo</td>
+                        <td>@item.Tipo</td>
+                        <td>@item.Cidade</td>
+                        <td>@item.Estado</td>
+                        <td>R$ @item.PrecoMinimo.ToString("N2")</td>
+                        <td>@item.Status</td>
+                        <td class="text-center">
+                            <a asp-action="Details" asp-route-id="@item.ImovelId" class="btn btn-info btn-sm me-1">Ver</a>
+                            <a asp-action="Edit" asp-route-id="@item.ImovelId" class="btn btn-warning btn-sm me-1">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@item.ImovelId" class="btn btn-danger btn-sm">Excluir</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

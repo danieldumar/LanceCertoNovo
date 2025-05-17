@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Erro Interno";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main role="main" class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="alert alert-danger shadow p-4 rounded" role="alert" aria-live="assertive" aria-atomic="true">
+                <h1 class="display-5 fw-bold mb-3">🚨 Ops! Algo deu errado.</h1>
+                <p class="lead text-muted mb-4">
+                    Infelizmente, não conseguimos concluir sua solicitação no momento.
+                </p>
+                <hr class="my-4" />
+                <p class="mb-4 text-secondary">
+                    Se o problema persistir, entre em contato com o suporte técnico.
+                </p>
+                <a asp-controller="Imovel"
+                   asp-action="Index"
+                   class="btn btn-primary btn-lg"
+                   aria-label="Voltar para a listagem de imóveis">
+                    Voltar para Imóveis
+                </a>
+            </div>
+        </div>
+    </div>
+</main>

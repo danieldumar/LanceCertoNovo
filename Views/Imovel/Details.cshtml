@@ -1,0 +1,60 @@
+@model LanceCerto.WebApp.Models.Imovel
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@{
+    ViewData["Title"] = "Detalhes do Imóvel";
+}
+
+<h2 class="mb-4">@ViewData["Title"]</h2>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <h4 class="card-title text-primary fw-bold">@Model.Titulo</h4>
+        <hr />
+
+        <dl class="row gy-2">
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Descricao):</dt>
+            <dd class="col-sm-9">@Model.Descricao</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Tipo):</dt>
+            <dd class="col-sm-9">@Model.Tipo</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Endereco):</dt>
+            <dd class="col-sm-9">@Model.Endereco</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Cidade):</dt>
+            <dd class="col-sm-9">@Model.Cidade</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Estado):</dt>
+            <dd class="col-sm-9">@Model.Estado</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.PrecoMinimo):</dt>
+            <dd class="col-sm-9">R$ @Model.PrecoMinimo.ToString("N2")</dd>
+
+            <dt class="col-sm-3 fw-semibold">@Html.DisplayNameFor(m => m.Status):</dt>
+            <dd class="col-sm-9">@Model.Status</dd>
+        </dl>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ImagemUrl))
+        {
+            <div class="text-center mt-4">
+                <img src="@Model.ImagemUrl"
+                     alt="Imagem do imóvel: @Model.Titulo"
+                     class="img-fluid rounded border"
+                     style="max-height:320px;" />
+            </div>
+        }
+        else
+        {
+            <div class="text-center text-muted fst-italic mt-4">
+                Nenhuma imagem cadastrada para este imóvel.
+            </div>
+        }
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-outline-secondary" aria-label="Voltar para a listagem de imóveis">
+        Voltar
+    </a>
+</div>
