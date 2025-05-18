@@ -35,6 +35,10 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
   <!-- Pasta Views/Imovel pode ser removida se não estiver criando arquivos via Visual Studio -->
   <!--
   <ItemGroup>
