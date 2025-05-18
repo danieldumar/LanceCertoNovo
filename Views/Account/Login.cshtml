@@ -1,25 +1,43 @@
 ﻿@model LanceCerto.WebApp.Models.LoginViewModel
-@inject IConfiguration Configuration
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @{
     ViewData["Title"] = "Entrar";
 }
 
-<h2 class="mb-4">Entrar na sua Conta</h2>
+<h2 class="mb-4">@ViewData["Title"]</h2>
 
-<form asp-action="Login" method="post" class="needs-validation" novalidate role="form" aria-label="Formulário de login">
+<form asp-controller="Account"
+      asp-action="Login"
+      method="post"
+      class="needs-validation"
+      novalidate
+      role="form"
+      aria-label="Formulário de login">
+
+    @Html.AntiForgeryToken()
     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+    <input asp-for="ReturnUrl" type="hidden" />
 
     <div class="mb-3">
         <label asp-for="Email" class="form-label">E-mail</label>
-        <input asp-for="Email" class="form-control" type="email" autocomplete="email" placeholder="usuario@email.com" required />
+        <input asp-for="Email"
+               class="form-control"
+               type="email"
+               autocomplete="email"
+               placeholder="usuario@email.com"
+               required />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="Senha" class="form-label">Senha</label>
-        <input asp-for="Senha" class="form-control" type="password" autocomplete="current-password" placeholder="********" required />
+        <input asp-for="Senha"
+               class="form-control"
+               type="password"
+               autocomplete="current-password"
+               placeholder="********"
+               required />
         <span asp-validation-for="Senha" class="text-danger"></span>
     </div>
 
@@ -28,14 +46,24 @@
         <label asp-for="LembrarMe" class="form-check-label">Lembrar-me</label>
     </div>
 
-    <div class="mb-3">
-        <div class="g-recaptcha" data-sitekey="@Configuration["GoogleReCaptcha:SiteKey"]"></div>
+    <div class="mb-4">
+        <div class="g-recaptcha"
+             data-sitekey="@Configuration["GoogleReCaptcha:SiteKey"]"
+             aria-label="reCAPTCHA"></div>
     </div>
 
     <div class="d-flex flex-wrap gap-2 align-items-center">
         <button type="submit" class="btn btn-primary">Entrar</button>
-        <a asp-controller="Account" asp-action="Cadastro" class="btn btn-outline-secondary">Criar nova conta</a>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-link">← Voltar para Início</a>
+        <a asp-controller="Account"
+           asp-action="Cadastro"
+           class="btn btn-outline-secondary">
+            Criar nova conta
+        </a>
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="btn btn-link">
+            ← Voltar para Início
+        </a>
     </div>
 </form>
 

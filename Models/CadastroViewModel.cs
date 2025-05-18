@@ -26,5 +26,20 @@ namespace LanceCerto.WebApp.Models
         [DataType(DataType.Date)]
         [Display(Name = "Data de Nascimento")]
         public DateTime DataNascimento { get; set; }
+
+        [Required(ErrorMessage = "O estado (UF) é obrigatório.")]
+        [StringLength(2, MinimumLength = 2, ErrorMessage = "O UF deve ter 2 caracteres.")]
+        [Display(Name = "Estado (UF)")]
+        public string Estado { get; set; } = string.Empty;
+
+        [Display(Name = "Sou Vendedor")]
+        public bool EhVendedor { get; set; }
+
+        [Display(Name = "Sou Corretor")]
+        public bool EhCorretor { get; set; }
+
+        [StringLength(20, ErrorMessage = "O CRECI deve ter no máximo 20 caracteres.")]
+        [Display(Name = "CRECI (se aplicável)")]
+        public string? Creci { get; set; }
     }
 }

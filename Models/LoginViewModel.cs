@@ -18,5 +18,10 @@ namespace LanceCerto.WebApp.Models
 
         [Display(Name = "Lembrar-me")]
         public bool LembrarMe { get; set; }
+
+        /// <summary>
+        /// URL para redirecionar após login bem-sucedido.
+        /// </summary>
+        public string? ReturnUrl { get; set; }
     }
 }
