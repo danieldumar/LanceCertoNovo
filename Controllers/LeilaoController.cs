@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace LanceCerto.WebApp.Controllers
 {
-    [Authorize]
     public class LeilaoController : Controller
     {
         private readonly LanceCertoDbContext _context;
