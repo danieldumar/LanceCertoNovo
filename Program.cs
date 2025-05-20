@@ -2,8 +2,7 @@
 using LanceCerto.WebApp.Models;
 using LanceCerto.WebApp.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;            // <-- Necessário para UseSqlite
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using AspNetCoreRateLimit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +23,7 @@ builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 6;
 
-    // Proteção contra brute-force
+    // Lockout (proteção contra brute-force)
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
@@ -35,11 +34,13 @@ builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
 .AddEntityFrameworkStores<LanceCertoDbContext>()
 .AddDefaultTokenProviders();
 
-// 🍪 Cookies de autenticação segura
+// 🍪 Cookies de autenticação
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? CookieSecurePolicy.SameAsRequest
+        : CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.Strict;
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/AccessDenied";
@@ -50,11 +51,12 @@ builder.Services.ConfigureApplicationCookie(options =>
 // 🌍 MVC com Razor Views
 builder.Services.AddControllersWithViews();
 
-// 🤖 Serviço de verificação reCAPTCHA
+// 🤖 reCAPTCHA: configurações tipadas e serviço de verificação
+builder.Services.Configure<RecaptchaSettings>(builder.Configuration.GetSection("GoogleReCaptcha"));
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<RecaptchaService>();
 
-// 🚫 Rate Limiting por IP (AspNetCoreRateLimit)
+// 🚫 Rate Limiting por IP
 builder.Services.AddMemoryCache();
 builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
 builder.Services.AddInMemoryRateLimiting();
@@ -64,9 +66,21 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 
 var app = builder.Build();
 
+#region 🔄 Garantir Banco e Migrations (SQLite)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<LanceCertoDbContext>();
+    db.Database.Migrate();
+}
+#endregion
+
 #region 🌐 Pipeline HTTP
 
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -77,7 +91,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseIpRateLimiting(); // 🔒 Proteção contra requisições abusivas
+// 🔒 Proteção contra requisições abusivas
+app.UseIpRateLimiting();
 
 app.UseAuthentication();
 app.UseAuthorization();
