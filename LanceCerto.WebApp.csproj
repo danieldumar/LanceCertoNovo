@@ -23,7 +23,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
 
-    <!-- Identity com EF Core (agora usando SQLite por baixo) -->
+    <!-- Identity com EF Core (SQLite) -->
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.16" />
 
     <!-- Middleware de rate-limit -->
@@ -33,6 +33,14 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.16">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <!-- Inclui o arquivo SQLite no build e publish -->
+  <ItemGroup>
+    <Content Include="lancecerto.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -45,4 +53,5 @@
     <Folder Include="Views\Imovel\" />
   </ItemGroup>
   -->
+
 </Project>
