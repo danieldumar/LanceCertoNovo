@@ -1,6 +1,7 @@
 ﻿using LanceCerto.WebApp.Data;
 using LanceCerto.WebApp.Models;
 using LanceCerto.WebApp.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AspNetCoreRateLimit;
@@ -28,7 +29,7 @@ builder.Services.AddIdentity<Usuario, IdentityRole<int>>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 
-    // E-mails únicos obrigatórios
+    // E-mails únicos
     options.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<LanceCertoDbContext>()
@@ -48,17 +49,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-// 🌍 MVC com Razor Views
+// 🌍 MVC com Razor
 builder.Services.AddControllersWithViews();
 
-// 🤖 reCAPTCHA: configurações tipadas e serviço de verificação
-builder.Services.Configure<RecaptchaSettings>(builder.Configuration.GetSection("GoogleReCaptcha"));
+// 🤖 reCAPTCHA
+builder.Services.Configure<RecaptchaSettings>(
+    builder.Configuration.GetSection("GoogleReCaptcha"));
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<RecaptchaService>();
 
-// 🚫 Rate Limiting por IP
+// 🚫 Rate Limiting
 builder.Services.AddMemoryCache();
-builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+builder.Services.Configure<IpRateLimitOptions>(
+    builder.Configuration.GetSection("IpRateLimiting"));
 builder.Services.AddInMemoryRateLimiting();
 builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
 
@@ -66,7 +69,7 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 
 var app = builder.Build();
 
-#region 🔄 Garantir Banco e Migrations (SQLite)
+#region 🔄 Migrations SQLite
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<LanceCertoDbContext>();
@@ -75,6 +78,12 @@ using (var scope = app.Services.CreateScope())
 #endregion
 
 #region 🌐 Pipeline HTTP
+
+// Processa cabeçalhos de proxy antes de redirecionar para HTTPS
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 if (app.Environment.IsDevelopment())
 {
@@ -91,13 +100,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// 🔒 Proteção contra requisições abusivas
+// Proteção contra requisições abusivas
 app.UseIpRateLimiting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 🧭 Rota padrão
+// Rota padrão
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
